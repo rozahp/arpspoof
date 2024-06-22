@@ -1,0 +1,9 @@
+function int_handler {
+	echo "War: program interrupted, stopping arpspoof ..."
+	./stoparp
+	exit
+}
+
+trap int_handler INT
+
+

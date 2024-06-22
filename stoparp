@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# echo 0 > /proc/sys/net/ipv4/ip_forward
+
+echo Log: killing all arpspoof processes ...
+
+killall arpspoof
+
+echo Log: sleeping 5 sec ...
+
+sleep 5
+
+#
+# EOF
+#

